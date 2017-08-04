@@ -1,0 +1,18 @@
+-- Ideas for thing --
+
+Okay so... What I need to do is draw the individiual rectangles and create an offset...
+
+Let's say the board is like this (x is alive, o is dead)
+
+[x][o][o]
+[x][x][o]
+[o][x][x] 
+
+I then want the output to be like...
+
+[Window						  ]
+[col-white][col-red][col-red  ]
+[col-white][col-white][col-red]
+[col-red][col-white][col-white]
+
+Unsure of how to do this I will stop for tonight. 8.3.17.
