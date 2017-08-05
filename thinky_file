@@ -16,3 +16,9 @@ I then want the output to be like...
 [col-red][col-white][col-white]
 
 Unsure of how to do this I will stop for tonight. 8.3.17.
+
+----------------------------------------------------------
+
+Currently I have a bug where it's not getting the correct number of neighbors in the 3x3 array. Example --> [http://prntscr.com/g4mm7x]
+
+

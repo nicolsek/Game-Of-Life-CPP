@@ -31,7 +31,7 @@ class golBoard {
 	public:
 		bool cells[GOLBOARD_SIZE][GOLBOARD_SIZE]; //Creating a [GOLBOARD_SIZE x GOLBOARD_SIZE] matrix. Only states are alive or dead soo boolean!
 
-		unsigned int getNeighbors(unsigned int, unsigned int);
+		unsigned short getNeighbors(unsigned int, unsigned int);
 		void generateNewBoard();
 		void printArr();
 		void printArr3(unsigned int, unsigned int);
@@ -45,23 +45,20 @@ class golBoard {
  */
 
 // getNeighbors ... Returns all current alive neighbors in a 3x3 fashion.
-unsigned int golBoard::getNeighbors(unsigned int col, unsigned int row) {
-	unsigned int neighbors = 0;
+unsigned short golBoard::getNeighbors(unsigned int row, unsigned int col) {
+	unsigned short neighbors = 0; //Neighbors start at 0.
 
 	/* Using a 3x3 search of the matrix */
-	for (int neighCol = -1; neighCol < 2; neighCol++) {
-		for (int neighRow = -1; neighRow < 2; neighRow++) {
+	for (char neighRow = -1; neighRow < 2; neighRow++) {
+		for (char neighCol = -1; neighCol < 2; neighCol++) {
 			/* Checking bounds */
-			if (neighRow + row > 0 && neighCol + col > 0) {
+			if (neighRow + row >= 0 && neighCol + col >= 0) {
 				neighbors += gol.cells[row + neighRow][col + neighCol];
 			}
 		}
 	}
 
 	neighbors -= gol.cells[row][col]; //Get rid of the center piece as a neighbor.
-
-	// gol.printArr();
-	// std::cout << "Neighbors for [" << row << "][" << col << "]: " << neighbors << std::endl;
 
 	return neighbors;
 }
@@ -71,7 +68,7 @@ void golBoard::generateNewBoard() {
 	std::srand(std::time(0)); //Seed the rand function using the current time.
 	for (auto &row : gol.cells) {
 		for (auto &col : row) {
-			col = std::rand() % 2;
+			col = std::rand() % 10 && 1;
 		}
 	}
 }
@@ -88,12 +85,12 @@ void golBoard::printArr() {
 }
 
 //printArr3 ... Print the array from the golBoard in 3x3 sections to check neighbors. 
-void golBoard::printArr3(unsigned int col, unsigned int row) {
+void golBoard::printArr3(unsigned int row, unsigned int col) {
 	/* Using a 3x3 search of the matrix */
-	for (int neighCol = -1; neighCol < 2; neighCol++) {
-		for (int neighRow = -1; neighRow < 2; neighRow++) {
+	for (int neighRow = -1; neighRow < 2; neighRow++) {
+		for (int neighCol = -1; neighCol < 2; neighCol++) {
 			/* Checking bounds */
-			if (neighRow + row > 0 && neighCol + col > 0) {
+			if (neighRow + row >= 0 && neighCol + col >= 0) {
 				std::cout << gol.cells[neighRow + row][neighCol + col] << " ";
 			}
 		}
@@ -118,8 +115,7 @@ void golBoard::update() {
 				gol.cells[row][col] = 0;
 			}
 			
-
-			if (!cell && neighbors == 3) { //4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+			if (!cell && neighbors == 3) {
 				gol.cells[row][col] = 1;
 			}
 		}
@@ -139,15 +135,15 @@ void draw(sf::RenderWindow &window) {
 		for (unsigned int col = 0; col < GOLBOARD_SIZE; col++) {
 			sf::RectangleShape rect(sf::Vector2f(width, height)); //The current rectangle shape.			
 
-			float offsetX = (WINDOW_WIDTH / GOLBOARD_SIZE) * row; //Defining the offset of where to draw the x position of the square to the screen.
-			float offsetY = (WINDOW_HEIGHT / GOLBOARD_SIZE) * col; //Defining the offset of where to draw the y position of the square to the screen.
+			unsigned int offsetX = (WINDOW_WIDTH / GOLBOARD_SIZE) * row; //Defining the offset of where to draw the x position of the square to the screen.
+			unsigned int offsetY = (WINDOW_HEIGHT / GOLBOARD_SIZE) * col; //Defining the offset of where to draw the y position of the square to the screen.
 
 			if (gol.cells[row][col] == 0) { //If the cell is dead display red.
 				rect.setFillColor(sf::Color::Black);
 			}
 			
 			rect.setPosition(offsetX, offsetY); //Set the position of the current quad to the correct offset.
-			rect.setOutlineColor(sf::Color::Black); //Draw a border around cells.
+			rect.setOutlineColor(sf::Color::Red); //Draw a border around cells.
 			rect.setOutlineThickness(1); //Draw a border around cells.
 		
 			window.draw(rect);
